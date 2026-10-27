@@ -150,6 +150,9 @@ src/
    @import "tailwindcss";
 
    @theme {
+     --font-sans:
+       "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+       Roboto, sans-serif;
      --color-brand-cyan: #06b6d4; /* Màu xanh Cyan công nghệ */
      --color-brand-red: #e50914; /* Màu đỏ rạp chiếu phim */
      --color-surface-bg: #0b0f19; /* Nền tối sâu dịu mắt */
@@ -171,11 +174,11 @@ Tuân thủ nguyên tắc: **Giao diện hài hòa, thân thiện, dễ nhìn, k
   - ❌ **Tránh:** Màu đen tuyệt đối `#000000` (làm mất chiều sâu khối, gây mỏi mắt khi xem phim ban đêm).
   - ❌ **Tránh:** Nền trắng sáng `#ffffff` (gây chói lóa mắt).
 - **Thẻ phim & Panel (Surface Cards):** `bg-slate-800/80` hoặc `bg-slate-850` kết hợp viền mờ `border border-white/10` hoặc `border-slate-700/50`.
-- **Màu chữ (Typography Hierarchy):**
-  - Chữ tiêu đề: `text-slate-100` (#f1f5f9) - sáng dịu, rõ nét.
-  - Chữ nội dung: `text-slate-300` (#cbd5e1).
-  - Chữ phụ / nhãn: `text-slate-400` (#94a3b8).
-  - Chữ ghi chú / disabled: `text-slate-600`.
+- **Màu chữ chuẩn hóa (Cinema Typography Colors):**
+  - **Chữ tiêu đề phim / Khối chính:** `text-slate-100` (#f1f5f9) - trắng sáng dịu, rõ nét, nổi bật trên nền rạp tối.
+  - **Chữ nội dung mô tả phim / Đánh giá (Body Text):** `text-slate-300` (#cbd5e1) - độ sáng cân bằng, dễ đọc lâu không mỏi mắt.
+  - **Chữ thông số phụ / Metadata (Năm, Quốc gia, Thời lượng):** `text-slate-400` (#94a3b8).
+  - **Chữ ghi chú / Disabled / Subtitle mờ:** `text-slate-500` (#64748b) / `text-slate-600`.
 - **Màu điểm nhấn (Movie Accent):**
   - Xem ngay / Nút chính: `bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold` hoặc `bg-rose-600 hover:bg-rose-500 text-white`.
   - Huy hiệu VIP / 4K Ultra HD: `bg-amber-400 text-slate-950 font-bold`.
@@ -186,6 +189,23 @@ Tuân thủ nguyên tắc: **Giao diện hài hòa, thân thiện, dễ nhìn, k
 
 - Poster phim có hiệu ứng phóng to nhẹ khi rê chuột: `group-hover:scale-105 transition-transform duration-300 ease-out`.
 - Nút bấm và các thẻ tương tác luôn có hiệu ứng phản hồi mềm: `active:scale-[0.98] transition-all`.
+
+### 5.3. Quy chuẩn Font chữ & Cỡ chữ (Cinema Typography Hierarchy cho Web Client)
+
+- **Font Family chính thức**: **`Plus Jakarta Sans`** (Font chữ bo cong nhẹ hiện đại, sang trọng, mang phong cách giải trí điện ảnh streaming cao cấp).
+  - Cấu hình CSS: `font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;`
+- **Bảng Thang Cỡ Chữ Chuẩn Web Client (Typography Scale Matrix)**:
+
+| Phân cấp UI                         | Class Tailwind                     | Kích thước / Line-height | Độ đậm (Weight)  | Vị trí áp dụng                                                     |
+| :---------------------------------- | :--------------------------------- | :----------------------- | :--------------- | :----------------------------------------------------------------- |
+| **Hero Display Title**              | `text-4xl md:text-5xl lg:text-6xl` | 36px - 60px              | `font-extrabold` | Tên phim lớn nổi bật trên Hero Banner Slider trang chủ             |
+| **Movie Title / Page Heading (H1)** | `text-2xl md:text-3xl`             | 24px - 30px              | `font-bold`      | Tên phim chính tại Trang chi tiết & Trang xem phim (WatchPage)     |
+| **Section Heading (H2)**            | `text-xl md:text-2xl`              | 20px - 24px              | `font-bold`      | Tiêu đề khối (Phim Đề Cử, Phim Thịnh Hành, Phim Bộ Mới)            |
+| **Movie Card Title / Modal Header** | `text-base md:text-lg`             | 16px - 18px              | `font-semibold`  | Tên phim trên các thẻ Poster dạng lưới, tiêu đề Auth Modal         |
+| **Body & Synopsis**                 | `text-sm md:text-base`             | 14px - 16px              | `font-normal`    | Đoạn tóm tắt nội dung phim, văn bản giới thiệu, nội dung bình luận |
+| **Episode & Action Button**         | `text-sm`                          | 14px / 20px              | `font-semibold`  | Nút số tập phim (Tập 1, 2...), Nút Xem ngay, Nút Đăng ký VIP       |
+| **Metadata & Subtext**              | `text-xs md:text-sm`               | 12px - 14px              | `font-medium`    | Thông số phụ (Năm phát hành, Quốc gia, Thể loại, Điểm IMDb)        |
+| **Badges & Tags**                   | `text-xs uppercase tracking-wider` | 11px - 12px              | `font-bold`      | Nhãn góc thẻ phim (VIP, 4K, FHD, TM/Vietsub, TẬP CUỐI)             |
 
 ---
 
