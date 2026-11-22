@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Font Family điện ảnh cao cấp */
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Bảng màu Cyberpunk Chuẩn Hóa (Theo Ảnh 1) */
+  --color-cyber-bg: #070913;
+  --color-neon-cyan: #00F0FF;
+  --color-neon-blue: #00A6FF;
+  --color-ultra-violet: #9D00FF;
+  --color-vibrant-magenta: #E100FF;
+  --color-cyber-yellow: #FFEE00;
+
+  /* Hệ màu Bề mặt & Khung chứa */
+  --color-surface-bg: #070913;
+  --color-surface-card: #0d1224;
+  --color-surface-card-hover: #141c38;
+  --color-surface-border: #162038;
+  --color-surface-glow: rgba(0, 240, 255, 0.35);
+
+  /* Điểm nhấn & Tương tác */
+  --color-brand-primary: #00F0FF;
+  --color-brand-secondary: #00A6FF;
+  --color-brand-accent: #9D00FF;
+  --color-brand-hot: #E100FF;
+  --color-brand-gold: #FFEE00;
+}
+
+/* Custom Scrollbar Siêu Mỏng Cyberpunk */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #070913;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00F0FF;
+  box-shadow: 0 0 10px #00F0FF;
+}
+
+/* Hiệu ứng Text Glow & Border Glow Cyberpunk */
+.text-glow-cyan {
+  text-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+}
+
+.text-glow-magenta {
+  text-shadow: 0 0 12px rgba(225, 0, 255, 0.6);
+}
+
+.shadow-glow-cyan {
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.35);
+}
+
+.shadow-glow-magenta {
+  box-shadow: 0 0 20px rgba(225, 0, 255, 0.35);
+}
+
+.shadow-glow-violet {
+  box-shadow: 0 0 20px rgba(157, 0, 255, 0.35);
+}

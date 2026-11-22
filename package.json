@@ -1,22 +1,27 @@
 {
   "name": "frontend-pj4",
-  "version": "1.0.0",
-  "main": "src/server.js",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "dev": "nodemon --inspect src/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
   },
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
-    "express": "^4.21.1",
-    "express-handlebars": "^8.0.1",
-    "method-override": "^3.0.0",
-    "node-fetch": "^3.3.2"
+    "lucide-react": "^1.46.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.4"
   },
   "devDependencies": {
-    "morgan": "^1.10.0",
-    "nodemon": "^3.1.7"
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~5.7.2",
+    "vite": "^8.3.0"
   }
 }
