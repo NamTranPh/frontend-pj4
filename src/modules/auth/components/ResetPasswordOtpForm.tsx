@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ArrowLeft, Lock, Eye, EyeOff, CheckCircle2, ShieldAlert } from 'lucide-react';
 import { OtpSixBoxes } from './OtpSixBoxes';
 import { Button } from '../../../components/ui/Button';
-import { authService } from '../services/authService';
+import { authService, getFriendlyErrorMessage } from '../services/authService';
 
 interface ResetPasswordOtpFormProps {
   email: string;
@@ -49,7 +49,8 @@ export const ResetPasswordOtpForm: React.FC<ResetPasswordOtpFormProps> = ({
       await authService.resetPassword({ email, otpCode, newPassword });
       onSuccess();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Đặt lại mật khẩu thất bại.');
+      setError(getFriendlyErrorMessage(err, 'Đặt lại mật khẩu thất bại. Vui lòng kiểm tra mã OTP.'));
+      setOtp(Array(6).fill(''));
     } finally {
       setLoading(false);
     }
@@ -70,8 +71,8 @@ export const ResetPasswordOtpForm: React.FC<ResetPasswordOtpFormProps> = ({
   };
 
   return (
-    <div className="w-full h-full flex flex-col justify-between p-6 sm:p-10 bg-white dark:bg-[#0d1224] text-slate-900 dark:text-white transition-colors duration-300">
-      <div className="space-y-4">
+    <div className="w-full h-full flex flex-col justify-center items-center px-6 sm:px-10 py-6 bg-white dark:bg-[#0d1224] text-slate-900 dark:text-white transition-colors duration-300 overflow-y-auto">
+      <div className="w-full max-w-sm my-auto space-y-4">
         {/* Header with Back button */}
         <div className="flex items-center justify-between">
           <button
@@ -183,10 +184,9 @@ export const ResetPasswordOtpForm: React.FC<ResetPasswordOtpFormProps> = ({
             LƯU MẬT KHẨU MỚI & ĐĂNG NHẬP
           </Button>
         </form>
-      </div>
-
-      <div className="text-center text-[11px] text-slate-400 dark:text-slate-500 pt-2 border-t border-slate-200 dark:border-[#162038]">
-        Mật khẩu được mã hóa an toàn qua thuật toán BCrypt của Spring Boot
+        <div className="text-center text-[11px] text-slate-400 dark:text-slate-500 pt-2 border-t border-slate-200 dark:border-[#162038]">
+          Mật khẩu được mã hóa an toàn qua thuật toán BCrypt của Spring Boot
+        </div>
       </div>
     </div>
   );

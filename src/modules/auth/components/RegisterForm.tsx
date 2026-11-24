@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Mail, Lock, User, Eye, EyeOff, UserPlus, ArrowRight } from 'lucide-react';
 import { Button } from '../../../components/ui/Button';
-import { authService } from '../services/authService';
+import { authService, getFriendlyErrorMessage } from '../services/authService';
 
 interface RegisterFormProps {
   onSwitchToLogin: () => void;
@@ -44,15 +44,15 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
       await authService.register({ name, email, password });
       onSuccess(email);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Đăng ký không thành công.');
+      setError(getFriendlyErrorMessage(err, 'Đăng ký không thành công. Vui lòng thử lại.'));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="w-full h-full flex flex-col justify-between p-6 sm:p-10 bg-white dark:bg-[#0d1224] text-slate-900 dark:text-white transition-colors duration-300">
-      <div className="space-y-4">
+    <div className="w-full h-full flex flex-col justify-center items-center px-6 sm:px-10 py-6 bg-white dark:bg-[#0d1224] text-slate-900 dark:text-white transition-colors duration-300 overflow-y-auto">
+      <div className="w-full max-w-sm my-auto space-y-4">
         {/* Header Form */}
         <div className="space-y-1">
           <div className="flex items-center justify-between">
@@ -174,18 +174,18 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
             TIẾP TỤC & NHẬN MÃ OTP
           </Button>
         </form>
-      </div>
 
-      {/* Switcher to Login */}
-      <div className="text-center text-xs text-slate-500 dark:text-slate-400 pt-3 border-t border-slate-200 dark:border-[#162038]">
-        Đã có tài khoản CYBERFLIX?{' '}
-        <button
-          type="button"
-          onClick={onSwitchToLogin}
-          className="text-[#00A6FF] dark:text-[#00F0FF] font-black hover:underline cursor-pointer ml-1"
-        >
-          Đăng nhập ngay →
-        </button>
+        {/* Switcher to Login */}
+        <div className="text-center text-xs text-slate-500 dark:text-slate-400 pt-3 border-t border-slate-200 dark:border-[#162038]">
+          Đã có tài khoản CYBERFLIX?{' '}
+          <button
+            type="button"
+            onClick={onSwitchToLogin}
+            className="text-[#00A6FF] dark:text-[#00F0FF] font-black hover:underline cursor-pointer ml-1"
+          >
+            Đăng nhập ngay →
+          </button>
+        </div>
       </div>
     </div>
   );

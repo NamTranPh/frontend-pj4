@@ -1,5 +1,19 @@
 import { env } from '../config/env';
 
+export class ApiError extends Error {
+  status: number;
+  code?: string;
+  data?: unknown;
+
+  constructor(message: string, status: number, code?: string, data?: unknown) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+    this.code = code;
+    this.data = data;
+  }
+}
+
 interface RequestOptions extends RequestInit {
   params?: Record<string, string | number | boolean | undefined>;
 }
@@ -63,7 +77,9 @@ class FetchClient {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({ message: response.statusText }));
-        throw new Error(errorData.message || `HTTP error ${response.status}`);
+        const code = errorData?.code;
+        const message = errorData?.message || `HTTP error ${response.status}`;
+        throw new ApiError(message, response.status, code, errorData);
       }
 
       return await response.json();

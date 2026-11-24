@@ -17,6 +17,14 @@ export const OtpSixBoxes: React.FC<OtpSixBoxesProps> = ({
   const [expiryCountdown, setExpiryCountdown] = useState<number>(300); // 5 phút
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
 
+  // Tự động focus ô đầu tiên khi mở form
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      inputsRef.current[0]?.focus();
+    }, 150);
+    return () => clearTimeout(timer);
+  }, []);
+
   // Đếm ngược gửi lại mã OTP (60s)
   useEffect(() => {
     if (resendCountdown <= 0) return;

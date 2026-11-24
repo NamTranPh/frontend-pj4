@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Mail, ArrowLeft, ArrowRight, KeyRound } from 'lucide-react';
 import { Button } from '../../../components/ui/Button';
-import { authService } from '../services/authService';
+import { authService, getFriendlyErrorMessage } from '../services/authService';
 
 interface ForgotPasswordEmailFormProps {
   onBackToLogin: () => void;
@@ -29,15 +29,15 @@ export const ForgotPasswordEmailForm: React.FC<ForgotPasswordEmailFormProps> = (
       await authService.forgotPassword({ email });
       onSuccess(email);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Không thể gửi mã khôi phục.');
+      setError(getFriendlyErrorMessage(err, 'Không thể gửi mã khôi phục. Vui lòng thử lại sau.'));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="w-full h-full flex flex-col justify-between p-6 sm:p-10 bg-white dark:bg-[#0d1224] text-slate-900 dark:text-white transition-colors duration-300">
-      <div className="space-y-6">
+    <div className="w-full h-full flex flex-col justify-center items-center px-6 sm:px-10 py-8 bg-white dark:bg-[#0d1224] text-slate-900 dark:text-white transition-colors duration-300 overflow-y-auto">
+      <div className="w-full max-w-sm my-auto space-y-6">
         {/* Header with Back button */}
         <div className="flex items-center justify-between">
           <button
@@ -99,10 +99,10 @@ export const ForgotPasswordEmailForm: React.FC<ForgotPasswordEmailFormProps> = (
             GỬI MÃ KHÔI PHỤC OTP
           </Button>
         </form>
-      </div>
 
-      <div className="text-center text-[11px] text-slate-400 dark:text-slate-500 pt-3 border-t border-slate-200 dark:border-[#162038]">
-        Hệ thống gửi mã tự động qua dịch vụ Email SMTP bảo mật cao
+        <div className="text-center text-[11px] text-slate-400 dark:text-slate-500 pt-3 border-t border-slate-200 dark:border-[#162038]">
+          Hệ thống gửi mã tự động qua dịch vụ Email SMTP bảo mật cao
+        </div>
       </div>
     </div>
   );

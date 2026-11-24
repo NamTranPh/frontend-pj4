@@ -15,23 +15,25 @@
 11. [Quy tắc Kiểm tra và Tái sử dụng Component (DRY)](#11-quy-tắc-kiểm-tra-và-tái-sử-dụng-component-dry)
 12. [Tiêu chuẩn các UI Primitives dùng chung](#12-tiêu-chuẩn-các-ui-primitives-dùng-chung)
 13. [Quản lý Form & Validation](#13-quản-lý-form--validation)
-14. [Quản lý State (Local, URL & Redux Toolkit)](#14-quản-lý-state-local-url--redux-toolkit)
+14. [Quản lý State, Debounce Tìm kiếm & Đồng bộ URL (useSearchParams)](#14-quản-lý-state-debounce-tìm-kiếm--đồng-bộ-url-usesearchparams)
 15. [Điều hướng & Bảo vệ Route (React Router v7)](#15-điều-hướng--bảo-vệ-route-react-router-v7)
 16. [HTTP Client & Kết nối Mạng (Native Fetch - CẤM AXIOS)](#16-http-client--kết-nối-mạng-native-fetch---cấm-axios)
 17. [Khớp nối Contract API Backend Spring Boot (ApiResponseDto)](#17-khớp-nối-contract-api-backend-spring-boot-apiresponsedto)
 18. [Quản lý Biến môi trường & Cấu hình (Environment Config)](#18-quản-lý-biến-môi-trường--cấu-hình-environment-config)
 19. [Quy chuẩn TypeScript & Kiểu dữ liệu](#19-quy-chuẩn-typescript--kiểu-dữ-liệu)
-20. [Tối ưu Hiệu năng Render & Tải trang](#20-tối-ưu-hiệu-năng-render--tải-trang)
-21. [Xử lý Lỗi, Error Boundary & Thông báo Toast](#21-xử-lý-lỗi-error-boundary--thông-báo-toast)
+20. [Tối ưu Hiệu năng, Dọn dẹp Tài nguyên & AbortController](#20-tối-ưu-hiệu-năng-dọn-dẹp-tài-nguyên--abortcontroller)
+21. [Xử lý Lỗi, Hộp thoại Cảnh báo & Thông báo SweetAlert2 (Cinema Dark Slate)](#21-xử-lý-lỗi-hộp-thoại-cảnh-báo--thông-báo-sweetalert2-cinema-dark-slate)
 22. [Quy tắc Đặt tên (Naming Conventions)](#22-quy-tắc-đặt-tên-naming-conventions)
 23. [CẤM TUYỆT ĐỐI TRONG WEB CLIENT](#23-cấm-tuyệt-đối-trong-web-client)
 24. [Checklist Tự kiểm tra trước khi hoàn thành](#24-checklist-tự-kiểm-tra-trước-khi-hoàn-thành)
+25. [Quy chuẩn Thiết kế Đáp ứng (Responsive Design & 4 Breakpoints)](#25-quy-chuẩn-thiết-kế-đáp-ứng-responsive-design--4-breakpoints)
+26. [Quy chuẩn áp dụng UI/UX Agent Skills (`impeccable` & `design-taste-frontend`)](#26-quy-chuẩn-áp-dụng-UI/UX-agent-skill)
 
 ---
 
 ## 1. Phạm vi & Ngăn xếp Công nghệ (Tech Stack)
 
-Tài liệu này là quy chuẩn kỹ thuật bắt buộc áp dụng cho cổng **Web Xem Phim dành cho Người dùng cuối (Web Client User Portal)**.
+Tài liệu này là quy chuẩn kỹ thuật bắt buộc áp dụng cho cổng **Web Xem Phim dành cho Người dùng cuối (Web Client User Portal - frontend-pj4)**.
 
 - **React:** `^19.2.x` (Functional Components + Hooks chuẩn React 19).
 - **Styling:** `Tailwind CSS ^4.3.x` (Cấu hình qua `@tailwindcss/vite`, CSS-first, không dùng file `tailwind.config.js`).
@@ -41,6 +43,7 @@ Tài liệu này là quy chuẩn kỹ thuật bắt buộc áp dụng cho cổng
 - **Global State:** `@reduxjs/toolkit ^2.x` & `react-redux ^9.x` (Lưu trữ User Session, Thông báo, Trạng thái Player).
 - **Trình phát Video Chuẩn:** **Vidstack Player (`@vidstack/react`)** tích hợp HLS `.m3u8`, đóng gói cục bộ qua npm (Local Bundle), **tuyệt đối không dùng CDN dynamic script**.
 - **Bộ Icon:** `lucide-react` (Đồng nhất nét vẽ 1.5 - 2px, kích thước chuẩn 16/18/20px).
+- **Thông báo & Hộp thoại Tương tác:** **SweetAlert2 (`sweetalert2`)** cấu hình giao diện Dark Slate Cinema (kính mờ, bo góc, icon hoạt họa sống động), đóng gói qua helper `src/utils/alert.ts`.
 - **HTTP Client:** Native `fetch` wrapper tập trung (`fetchClient.ts`). **CẤM TUYỆT ĐỐI AXIOS**.
 
 ---
@@ -99,7 +102,7 @@ src/
 ├── components/                       # Shared Components (Dùng chung)
 │   ├── ui/                           # UI Primitives: Button, Input, Modal, Badge, Dropdown, Skeleton
 │   ├── layout/                       # ClientLayout, Header, NavigationBar, Footer
-│   └── feedback/                     # LoadingSpinner, EmptyState, ToastNotification
+│   └── feedback/                     # LoadingSpinner, EmptyState, ErrorBoundary
 │
 ├── api/                              # Network Layer
 │   └── fetchClient.ts                # Wrapper native fetch (Bearer token, refresh token)
@@ -111,6 +114,7 @@ src/
 │   └── common.types.ts
 │
 ├── utils/                            # Helper functions (format thời lượng video, tiền VNĐ, ngày)
+│   └── alert.ts                      # SweetAlert2 Dark Slate Cinema Wrapper (Toasts & Confirm Modals)
 └── index.css                         # @import "tailwindcss"; + Custom theme tokens
 ```
 
@@ -190,7 +194,7 @@ Tuân thủ nguyên tắc: **Giao diện hài hòa, thân thiện, dễ nhìn, k
 - Poster phim có hiệu ứng phóng to nhẹ khi rê chuột: `group-hover:scale-105 transition-transform duration-300 ease-out`.
 - Nút bấm và các thẻ tương tác luôn có hiệu ứng phản hồi mềm: `active:scale-[0.98] transition-all`.
 
-### 5.3. Quy chuẩn Font chữ & Cỡ chữ (Cinema Typography Hierarchy cho Web Client)
+### 5.3. Quy chuẩn Font chữ & Cỡ chữ (Cinema Typography Hierarchy)
 
 - **Font Family chính thức**: **`Plus Jakarta Sans`** (Font chữ bo cong nhẹ hiện đại, sang trọng, mang phong cách giải trí điện ảnh streaming cao cấp).
   - Cấu hình CSS: `font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;`
@@ -246,14 +250,14 @@ Tuân thủ nguyên tắc: **Giao diện hài hòa, thân thiện, dễ nhìn, k
    - Sử dụng hook `useWatchProgress`: Lắng nghe thời gian phát của video (`currentTime`).
    - Debounce gửi API cập nhật tiến độ xem sau mỗi **5 - 10 giây** hoặc khi người dùng bấm `Pause` / tắt trình duyệt (`beforeunload`).
 2. **Tự động tua tiếp (Resume Playback):**
-   - Khi người dùng bấm xem lại bộ phim đang xem dở, Player tự động nhảy đến số giây đã lưu trước đó và hiển thị thông báo nhỏ _"Đã tiếp tục từ phút 14:20"_.
+   - Khi người dùng bấm xem lại bộ phim đang xem dở, Player tự động nhảy đến số giây đã lưu trước đó và hiển thị thông báo nhỏ qua SweetAlert2 Toast: _"Đã tiếp tục từ phút 14:20"_.
 
 ---
 
 ## 9. Phim Yêu thích & Tương tác Người dùng
 
-1. **Nút Yêu thích (Favorite):** Đổi màu tức thì (Optimistic UI) sang màu đỏ tim `text-rose-500` khi bấm, sau đó gọi API ngầm. Nếu lỗi thì revert lại trạng thái cũ.
-2. **Đánh giá sao & Bình luận:** Hiển thị điểm số trung bình (ví dụ: `★ 8.8/10`), kiểm tra đăng nhập trước khi cho phép gửi đánh giá.
+1. **Nút Yêu thích (Favorite):** Đổi màu tức thì (Optimistic UI) sang màu đỏ tim `text-rose-500` khi bấm, sau đó gọi API ngầm. Nếu lỗi thì revert lại trạng thái cũ và báo lỗi qua Toast.
+2. **Đánh giá sao & Bình luận:** Hiển thị điểm số trung bình (ví dụ: `★ 8.8/10`), kiểm tra đăng nhập trước khi cho phép gửi đánh giá. Nếu chưa đăng nhập, mở SweetAlert2 modal nhắc nhở đăng nhập.
 
 ---
 
@@ -263,7 +267,7 @@ Tuân thủ nguyên tắc: **Giao diện hài hòa, thân thiện, dễ nhìn, k
 2. **Thanh toán VietQR PayOS:**
    - Gọi Backend tạo đơn thanh toán $\rightarrow$ Nhận link thanh toán và mã QR VietQR.
    - Hiển thị Modal quét mã QR với thời gian đếm ngược (Countdown timer 15 phút).
-   - Polling trạng thái đơn hàng (`/api/v1/payment/check-status/:orderId`) mỗi 3 giây $\rightarrow$ Tự động chuyển màn hình _"Thanh toán thành công! Bạn đã được kích hoạt VIP"_ ngay khi nhận tiền.
+   - Polling trạng thái đơn hàng (`/api/v1/payment/check-status/:orderId`) mỗi 3 giây $\rightarrow$ Tự động chuyển màn hình SweetAlert2 thành công: _"Thanh toán thành công! Bạn đã được kích hoạt VIP"_ ngay khi nhận tiền.
 
 ---
 
@@ -301,15 +305,21 @@ Mọi dự án phải có các UI Primitives tối thiểu sau trong `src/compon
 
 ---
 
-## 14. Quản lý State (Local, URL & Redux Toolkit)
+## 14. Quản lý State, Debounce Tìm kiếm & Đồng bộ URL (useSearchParams)
 
-- **Local State (`useState`):** Bật/tắt popup modal, giá trị input form tạm thời, tab đang active.
-- **URL State (`searchParams`):** Bộ lọc thể loại, từ khóa tìm kiếm, quốc gia, năm phát hành, trang hiện tại.
-- **Redux Toolkit (`src/app/store.ts`):** Chỉ dùng cho dữ liệu chia sẻ toàn ứng dụng:
-  - Thông tin tài khoản đăng nhập (`authSlice`).
-  - Số lượng thông báo chưa đọc (`notificationSlice`).
-  - Trạng thái trình phát thu nhỏ PiP / Âm lượng toàn cục (`playerSlice`).
-- **Cấm:** Không đưa toàn bộ danh sách dữ liệu từ API vào Redux Store nếu danh sách đó chỉ sử dụng trên 1 màn hình duy nhất.
+1. **Phân cấp State rõ ràng:**
+   - **Local State (`useState`):** Bật/tắt popup modal, giá trị input form tạm thời, tab đang active.
+   - **URL State (`useSearchParams`):** Bộ lọc thể loại, từ khóa tìm kiếm, quốc gia, năm phát hành, sắp xếp, trang hiện tại.
+   - **Redux Toolkit (`src/app/store.ts`):** Chỉ dùng cho dữ liệu chia sẻ toàn ứng dụng:
+     - Thông tin tài khoản đăng nhập (`authSlice`).
+     - Số lượng thông báo chưa đọc (`notificationSlice`).
+     - Trạng thái trình phát thu nhỏ PiP / Âm lượng toàn cục (`playerSlice`).
+   - **Cấm:** Không đưa toàn bộ danh sách dữ liệu từ API vào Redux Store nếu danh sách đó chỉ sử dụng trên 1 màn hình duy nhất.
+2. **Debounce Tìm kiếm:**
+   - Ô tìm kiếm phim / diễn viên trên Header bắt buộc có **Debounce 300ms - 500ms** trước khi gửi API tìm kiếm, tránh việc gõ mỗi ký tự lại gửi request gây quá tải server.
+3. **Đồng bộ 2 chiều với URL SearchParams:**
+   - Mọi bộ lọc tại `MovieFilterBar` phải cập nhật trực tiếp vào URL (ví dụ: `/movies?genre=action&year=2026&page=2`).
+   - Khi người dùng F5 hoặc chia sẻ đường link cho bạn bè, trang phim phải tự động khôi phục đúng bộ lọc đã chọn.
 
 ---
 
@@ -385,7 +395,12 @@ export interface ApiResponse<T> {
 ## 19. Quy chuẩn TypeScript & Kiểu dữ liệu
 
 1. **Cấm dùng `any`:** Nếu dữ liệu chưa xác định rõ, dùng `unknown` và viết type-guard để kiểm tra.
-2. **Interface cho Object, Type cho Union/Alias:**
+2. **Đồng bộ Enums với Backend:**
+   - `AgeRating`: `"P" | "K" | "T13" | "T16" | "T18" | "C"`
+   - `AudioTrackType`: `"VIETSUB" | "DUBBED" | "VOICEOVER" | "MULTI_AUDIO"`
+   - `VideoQuality`: `"HD" | "FULL_HD" | "FOUR_K"`
+   - `MovieType`: `"SINGLE" | "SERIES"`
+3. **Interface cho Entity:**
    ```typescript
    export interface Movie {
      id: string;
@@ -394,25 +409,115 @@ export interface ApiResponse<T> {
      posterUrl: string;
      backdropUrl: string;
      type: "SINGLE" | "SERIES";
-     quality: "HD" | "FHD" | "4K";
+     quality: "HD" | "FULL_HD" | "FOUR_K";
+     ageRating: "P" | "K" | "T13" | "T16" | "T18" | "C";
    }
    ```
-3. **Không ép kiểu mù quáng (`as unknown as TargetType`).**
+4. **Không ép kiểu mù quáng (`as unknown as TargetType`).**
 
 ---
 
-## 20. Tối ưu Hiệu năng Render & Tải trang
+## 20. Tối ưu Hiệu năng, Dọn dẹp Tài nguyên & AbortController
 
 1. **Lazy Loading Routes:** Áp dụng `React.lazy` và `Suspense` cho các trang chi tiết phim hoặc trang tài khoản lớn để tối ưu First Load.
 2. **Tối ưu hình ảnh Poster/Backdrop:** Sử dụng `loading="lazy"` cho ảnh bên dưới màn hình cuộn, luôn kèm fallback ảnh mặc định khi link ảnh lỗi (`onError`).
-3. **Cleanup Effect:** Mọi `setInterval`, `addEventListener`, hoặc phiên phát video phải được dọn dẹp trong hàm return của `useEffect`.
+3. **Ngắt Request dở dang qua AbortController:**
+   - Khi người dùng bấm chuyển đổi liên tục giữa các tập phim hoặc chuyển route, hàm gọi API phát video phải kích hoạt `AbortController.abort()` để tránh chồng chéo dữ liệu và tiết kiệm băng thông.
+4. **Dọn dẹp Player khi Unmount (Cleanup Effect):**
+   - Mọi `setInterval`, `addEventListener`, và instance phát video của Vidstack phải được giải phóng và hủy triệt để trong hàm return của `useEffect`, tránh tình trạng video cũ vẫn phát âm thanh ngầm khi người dùng đã chuyển trang.
 
 ---
 
-## 21. Xử lý Lỗi, Error Boundary & Thông báo Toast
+## 21. Xử lý Lỗi, Hộp thoại Cảnh báo & Thông báo SweetAlert2 (Cinema Dark Slate)
 
-1. **Bắt lỗi giao diện:** Bọc ứng dụng trong `ErrorBoundary` để tránh việc lỗi một component nhỏ làm trắng toàn bộ màn hình.
-2. **Thông báo thân thiện:** Dùng Toast thông báo góc màn hình với icon rõ ràng. Không hiển thị chuỗi lỗi thô của cơ sở dữ liệu (`SQL syntax error`) cho người dùng cuối.
+Hệ thống thông báo và hộp thoại tương tác của Web Client sử dụng thư viện **SweetAlert2 (`sweetalert2`)** được tùy biến riêng theo hệ màu **Dark Slate Cinema** (không dùng giao diện trắng mặc định gây chói mắt).
+
+### 21.1. Cấu hình Wrapper tập trung (`src/utils/alert.ts`)
+
+Mọi thông báo đều gọi qua module `src/utils/alert.ts` để đảm bảo tính đồng bộ và thẩm mỹ:
+
+```typescript
+import Swal from "sweetalert2";
+
+// 1. Cấu hình Toast góc màn hình (Top-End Toast)
+const CinemaToast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  background: "#131c2e", // Slate 900
+  color: "#f1f5f9", // Slate 100
+  customClass: {
+    popup: "border border-slate-700/80 shadow-xl rounded-xl backdrop-blur-md",
+    timerProgressBar: "bg-cyan-500",
+  },
+  didOpen: (toast) => {
+    toast.onmouseenter = Swal.stopTimer;
+    toast.onmouseleave = Swal.resumeTimer;
+  },
+});
+
+export const showToast = {
+  success: (message: string) =>
+    CinemaToast.fire({ icon: "success", title: message, iconColor: "#10b981" }),
+  error: (message: string) =>
+    CinemaToast.fire({ icon: "error", title: message, iconColor: "#f43f5e" }),
+  info: (message: string) =>
+    CinemaToast.fire({ icon: "info", title: message, iconColor: "#06b6d4" }),
+  warning: (message: string) =>
+    CinemaToast.fire({ icon: "warning", title: message, iconColor: "#f59e0b" }),
+};
+
+// 2. Hộp thoại Xác nhận / Cảnh báo lớn ở giữa màn hình (Confirm Dialog)
+export const showConfirmDialog = async ({
+  title,
+  text,
+  confirmText = "Xác nhận",
+  cancelText = "Hủy",
+  icon = "warning",
+}: {
+  title: string;
+  text: string;
+  confirmText?: string;
+  cancelText?: string;
+  icon?: "warning" | "error" | "success" | "info" | "question";
+}) => {
+  return Swal.fire({
+    title,
+    text,
+    icon,
+    showCancelButton: true,
+    confirmButtonText: confirmText,
+    cancelButtonText: cancelText,
+    background: "#131c2e",
+    color: "#f1f5f9",
+    customClass: {
+      popup:
+        "border border-slate-700/80 rounded-2xl shadow-2xl backdrop-blur-md",
+      title: "text-xl font-bold text-slate-100",
+      htmlContainer: "text-sm text-slate-300",
+      confirmButton:
+        "px-5 py-2.5 rounded-xl font-bold bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-md active:scale-[0.98] transition-all mx-1.5",
+      cancelButton:
+        "px-5 py-2.5 rounded-xl font-medium bg-slate-700/80 hover:bg-slate-700 text-slate-200 border border-slate-600/50 active:scale-[0.98] transition-all mx-1.5",
+    },
+    buttonsStyling: false,
+  });
+};
+```
+
+### 21.2. Kịch bản ứng dụng SweetAlert2 trong Web Client
+
+- **Toast góc màn hình:**
+  - _"Đã lưu phim vào danh sách yêu thích"_ ❤️.
+  - _"Đã tiếp tục phát từ phút 14:20"_ ⏱️.
+  - _"Đã sao chép liên kết chia sẻ phim"_.
+  - _"Đã gửi đánh giá thành công"_.
+- **Modal trung tâm (Dialog):**
+  - **Nhắc nhở VIP:** Khi người dùng xem phim chất lượng 4K mà chưa có VIP $\rightarrow$ Mở Modal mời nâng cấp VIP kèm nút _"Xem bảng giá ngay"_.
+  - **Yêu cầu đăng nhập:** Khi người dùng chưa đăng nhập mà bấm Thêm yêu thích hoặc Đánh giá $\rightarrow$ Mở Modal nhắc đăng nhập.
+  - **Xác nhận hành động:** Khi người dùng bấm _"Xóa sạch lịch sử xem"_ hoặc _"Đăng xuất tài khoản"_.
 
 ---
 
@@ -432,6 +537,7 @@ export interface ApiResponse<T> {
 ## 23. CẤM TUYỆT ĐỐI TRONG WEB CLIENT
 
 - ❌ **CẤM cài đặt và sử dụng Axios** (bắt buộc dùng `fetchClient`).
+- ❌ **CẤM sử dụng `window.alert()` hoặc `window.confirm()` thô của trình duyệt** (bắt buộc dùng helper `src/utils/alert.ts` của SweetAlert2).
 - ❌ **CẤM chèn thẻ `<script src="...jsdelivr...">` động** để nạp player (bắt buộc đóng gói qua npm để tránh sập CDN).
 - ❌ **CẤM sử dụng màu nền đen xì `#000000` hoặc màu trắng toát** gây chói và mỏi mắt người dùng.
 - ❌ **CẤM hardcode URL API** trong components hoặc services.
@@ -451,6 +557,39 @@ Trước khi hoàn thành bất kỳ chức năng nào, phải xác nhận:
 - [ ] Giao diện có đạt chuẩn màu Slate / Charcoal dịu mắt, thân thiện, không quá tối/sáng?
 - [ ] Khung Player có hỗ trợ đầy đủ phím tắt, đổi chất lượng, và lưu tiến độ xem không?
 - [ ] Có gọi API thông qua `fetchClient` (tuyệt đối không dùng `axios`) không?
-- [ ] Các trạng thái Loading (Skeleton/Spinner), Empty state và Error message đã đầy đủ chưa?
-- [ ] Đã kiểm tra hiển thị responsive trên mobile và desktop chưa?
+- [ ] Các thông báo và hộp thoại xác nhận đã sử dụng SweetAlert2 wrapper (`src/utils/alert.ts`) chưa?
+- [ ] Ô tìm kiếm và bộ lọc đã có Debounce và đồng bộ 2 chiều với `useSearchParams` chưa?
+- [ ] Các request mạng và Player đã có `AbortController` và hàm dọn dẹp (cleanup) khi unmount chưa?
+- [ ] Đã kiểm tra hiển thị responsive trên 4 nhóm thiết bị (Mobile, Tablet, Laptop, PC)?
 - [ ] Không có cảnh báo linter (`oxlint` hoặc `tsc -b`) và không còn kiểu `any`?
+
+---
+
+## 25. Quy chuẩn Thiết kế Đáp ứng (Responsive Design & 4 Breakpoints)
+
+Trang Web Xem Phim bắt buộc phải tối ưu trải nghiệm thị giác và thao tác mượt mà trên **4 nhóm thiết bị tiêu chuẩn**:
+
+### 25.1. Bảng 4 Nhóm Breakpoints Tiêu Chuẩn
+
+| Nhóm Thiết Bị           | Kích Thước Màn Hình | Tiền Tố Tailwind                 | Mục Tiêu Bố Cục Web Xem Phim                                                                                                                                                    |
+| :---------------------- | :------------------ | :------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **1. Phone (Mobile)**   | `< 640px`           | `base` (không có tiền tố)        | Layout 1 cột. Header dạng rút gọn, Menu điều hướng dạng **Off-canvas Drawer** trượt nổi có Backdrop Blur Overlay. Player video chiếm 100% bề ngang. Touch target $\ge$ 36x36px. |
+| **2. Tablet**           | `640px` – `1023px`  | `sm:` (640px) & `md:` (768px)    | Lưới poster phim 2–3 cột (`sm:grid-cols-2 md:grid-cols-3`). Khung Player giữ tỷ lệ 16:9 sắc nét, danh sách tập phim xếp dạng lưới cuộn ngang hoặc thu gọn tiện lợi.             |
+| **3. Laptop**           | `1024px` – `1279px` | `lg:` (1024px)                   | Bố cục đầy đủ chuẩn Cinema. Thanh điều hướng ngang hoàn chỉnh. Trang xem phim hiển thị song song Khung Player bên trái và Danh sách Tập phim / Đề xuất bên phải.                |
+| **4. PC / Desktop Lớn** | `≥ 1280px`          | `xl:` (1280px) & `2xl:` (1536px) | Trải nghiệm rạp chiếu phim đỉnh cao. Chế độ Cinema Mode mở rộng tối đa khung hình, Lưới danh mục phim hiển thị 5–6 cột (`xl:grid-cols-5 2xl:grid-cols-6`).                      |
+
+### 25.2. Quy Chuẩn Điều Hướng Trên Mobile & Tablet
+
+1. **Off-canvas Navigation Drawer:**
+   - Trên màn hình `< lg`, toàn bộ menu danh mục (Phim lẻ, Phim bộ, Thể loại, Bảng xếp hạng) được gom vào nút Hamburger menu.
+   - Khi bấm mở menu: Drawer trượt từ cạnh trái vào màn hình với animation mượt mà.
+   - **Lớp phủ mờ bắt buộc (Backdrop Blur Overlay):** `fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-40 transition-opacity`.
+   - Người dùng chạm vào lớp phủ mờ hoặc bấm vào bất kỳ liên kết chuyển trang nào thì Drawer **tự động đóng**.
+
+2. **Quy chuẩn Vùng Chạm Cảm Ứng (Touch Target):**
+   - Mọi nút bấm tương tác trên Player (Play/Pause, Skip 10s, Bật âm thanh, Nút chọn tập phim) trên thiết bị di động phải có diện tích chạm tối thiểu **36x36px** (khuyến nghị 40x40px) để ngón tay dễ dàng thao tác mà không bị bấm nhầm.
+
+---
+## 26. Quy chuẩn áp dụng UI/UX Agent Skills (`impeccable` & `design-taste-frontend`)
+- Khi dựng mới hoặc nâng cấp giao diện Client, bắt buộc áp dụng tư duy bố cục, phân cấp thị giác (visual hierarchy), spacing và micro-interactions từ `.agents/skills/design-taste-frontend/SKILL.md` và `.agents/skills/impeccable/SKILL.md`.
+- **Nguyên tắc bất di bất dịch:** Tuyệt đối tuân thủ bảng màu Cyberpunk GenZ, `sweetalert2`, `fetchClient.ts` (cấm Axios) và 4 breakpoints đã quy định ở trên; không ghi đè bằng màu sắc hay thư viện mặc định của skill.
