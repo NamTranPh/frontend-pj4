@@ -6,6 +6,9 @@ import { MovieListPage } from '../modules/movies/pages/MovieListPage';
 import { MovieDetailPage } from '../modules/movies/pages/MovieDetailPage';
 import { WatchPage } from '../modules/watch/pages/WatchPage';
 import { VipPricingPage } from '../modules/membership/pages/VipPricingPage';
+import { FavoritesPage } from '../modules/favorites/pages/FavoritesPage';
+import { HistoryPage } from '../modules/history/pages/HistoryPage';
+import { AccountPage } from '../modules/account/pages/AccountPage';
 import { useAuthModal } from '../modules/auth/context/AuthModalContext';
 
 const AuthRedirectHandler: React.FC = () => {
@@ -29,6 +32,9 @@ export const AppRoutes: React.FC = () => {
         <Route path="movies/:slug" element={<MovieDetailPage />} />
         <Route path="watch/:slug" element={<WatchPage />} />
         <Route path="vip" element={<VipPricingPage />} />
+        <Route path="favorites" element={<FavoritesPage />} />
+        <Route path="history" element={<HistoryPage />} />
+        <Route path="account" element={<AccountPage />} />
         <Route path="auth/login" element={<AuthRedirectHandler />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>

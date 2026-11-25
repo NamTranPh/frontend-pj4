@@ -69,3 +69,30 @@
 .shadow-glow-violet {
   box-shadow: 0 0 20px rgba(157, 0, 255, 0.35);
 }
+
+/* Hiệu ứng Mở Bung Từ Tâm Màn Hình (Center Card-to-Fullscreen Expansion) */
+@keyframes tvReveal {
+  0% {
+    clip-path: inset(42% 42% 42% 42% round 24px);
+    transform: scale(1.18);
+    opacity: 0.3;
+    filter: brightness(1.6) contrast(1.1);
+  }
+  35% {
+    clip-path: inset(22% 22% 22% 22% round 16px);
+    transform: scale(1.09);
+    opacity: 0.85;
+    filter: brightness(1.2) contrast(1.05);
+  }
+  100% {
+    clip-path: inset(0% 0% 0% 0% round 0px);
+    transform: scale(1.02);
+    opacity: 1;
+    filter: brightness(1) contrast(1);
+  }
+}
+
+.animate-tv-reveal {
+  animation: tvReveal 750ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: clip-path, transform, opacity;
+}

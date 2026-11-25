@@ -94,7 +94,7 @@ export const MovieListPage: React.FC = () => {
         <div className="h-64 flex flex-col items-center justify-center gap-3 text-center bg-white dark:bg-[#0d1224] rounded-2xl border border-slate-200 dark:border-[#162038] shadow-sm">
           <Film size={36} className="text-slate-400 dark:text-slate-500" />
           <p className="text-sm font-bold text-slate-700 dark:text-slate-300">Không tìm thấy bộ phim phù hợp</p>
-          <span className="text-xs text-slate-500">Hãy thử đổi thể loại hoặc từ khóa tìm kiếm</span>
+          <span className="text-xs text-slate-500 dark:text-slate-400">Hãy thử đổi thể loại hoặc từ khóa tìm kiếm</span>
         </div>
       )}
     </div>

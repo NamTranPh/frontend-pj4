@@ -51,7 +51,7 @@ export const LoginPage: React.FC = () => {
                 placeholder="cyberuser@example.com"
                 className="w-full bg-[#070913] border border-[#162038] focus:border-[#00F0FF] text-xs text-slate-100 rounded-xl pl-9 pr-3 py-2.5 outline-none transition-all focus:shadow-[0_0_10px_rgba(0,240,255,0.3)]"
               />
-              <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+              <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-400" />
             </div>
           </div>
 
@@ -71,7 +71,7 @@ export const LoginPage: React.FC = () => {
                 placeholder="••••••••"
                 className="w-full bg-[#070913] border border-[#162038] focus:border-[#00F0FF] text-xs text-slate-100 rounded-xl pl-9 pr-3 py-2.5 outline-none transition-all focus:shadow-[0_0_10px_rgba(0,240,255,0.3)]"
               />
-              <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+              <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-400" />
             </div>
           </div>
 

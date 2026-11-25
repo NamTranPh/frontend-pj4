@@ -1,5 +1,11 @@
 import { AgeRating, MovieType, VideoQuality } from '../../../types/common.types';
 
+export interface CastMember {
+  name: string;
+  character: string;
+  avatarUrl?: string;
+}
+
 export interface Movie {
   id: number | string;
   title: string;
@@ -20,4 +26,6 @@ export interface Movie {
   viewsCount?: number;
   genres: string[];
   isVip?: boolean;
+  director?: string;
+  cast?: CastMember[];
 }

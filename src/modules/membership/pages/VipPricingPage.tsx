@@ -86,7 +86,7 @@ export const VipPricingPage: React.FC = () => {
             key={plan.id}
             className={`rounded-3xl p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 relative ${
               plan.isPopular
-                ? 'bg-linear-to-b from-purple-50/80 via-white to-amber-50/60 dark:from-[#1b1236] dark:to-[#0d1224] border-2 border-amber-400 dark:border-[#FFEE00] shadow-xl dark:shadow-[0_0_35px_rgba(255,238,0,0.25)] scale-105 z-10'
+                ? 'bg-linear-to-b from-purple-50/80 via-white to-amber-50/60 dark:from-[#1b1236] dark:to-[#0d1224] border-2 border-amber-400 dark:border-[#FFEE00] shadow-xl dark:shadow-[0_0_35px_rgba(255,238,0,0.25)] scale-100 md:scale-105 z-10'
                 : 'bg-white dark:bg-[#0d1224] border border-slate-200 dark:border-[#162038] hover:border-[#00A6FF] dark:hover:border-[#00F0FF]/40 shadow-sm'
             }`}
           >
@@ -136,8 +136,10 @@ export const VipPricingPage: React.FC = () => {
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white dark:bg-[#0d1224] border border-slate-200 dark:border-[#00F0FF]/40 rounded-3xl max-w-sm w-full p-6 space-y-5 shadow-2xl dark:shadow-[0_0_40px_rgba(0,240,255,0.3)] relative">
             <button
+              type="button"
               onClick={() => setShowQrModal(false)}
-              className="absolute top-4 right-4 p-1 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white"
+              className="absolute top-4 right-4 min-w-[40px] min-h-[40px] rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-700 dark:hover:text-white bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 transition-all active:scale-95 cursor-pointer"
+              aria-label="Đóng cửa sổ"
             >
               <X size={20} />
             </button>
@@ -168,7 +170,7 @@ export const VipPricingPage: React.FC = () => {
               <div className="text-xs text-[#00A6FF] dark:text-[#00F0FF] font-mono font-bold animate-pulse">
                 Đang chờ hệ thống PayOS ghi nhận...
               </div>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
                 Đơn hàng tự động hết hạn sau 15 phút
               </p>
             </div>

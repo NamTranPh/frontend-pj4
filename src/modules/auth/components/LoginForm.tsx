@@ -49,7 +49,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             <span className="w-2 h-2 rounded-full bg-[#00F0FF] shadow-[0_0_8px_#00F0FF]" />
           </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            Truy cập tài khoản CYBERFLIX để đồng bộ tiến độ xem phim
+            Chào mừng bạn trở lại với hệ thống CYBERFLIX
           </p>
         </div>
 
