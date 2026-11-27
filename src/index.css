@@ -96,3 +96,18 @@
   animation: tvReveal 750ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
   will-change: clip-path, transform, opacity;
 }
+
+/* Hiệu ứng Linh vật Bay Lơ Lửng (Subtle Floating Micro-interaction) */
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(0.8deg);
+  }
+}
+
+.animate-float-slow {
+  animation: floatSlow 3.8s ease-in-out infinite;
+  will-change: transform;
+}

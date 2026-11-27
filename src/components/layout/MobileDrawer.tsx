@@ -160,7 +160,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-xs font-bold text-slate-900 dark:text-white truncate">
-                    Thành viên Cyberflix
+                    Thành viên Fuseflix
                   </div>
                   <div className="text-[11px] text-[#00A6FF] dark:text-[#00F0FF] font-semibold flex items-center gap-1">
                     <Sparkles size={11} /> Đã xác thực bảo mật

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from "react";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import {
   Search,
   Film,
@@ -14,29 +14,30 @@ import {
   Sparkles,
   Flame,
   Tv,
-} from 'lucide-react';
-import { Button } from '../ui/Button';
-import { ThemeToggle } from '../ui/ThemeToggle';
-import { useAuthModal } from '../../modules/auth/context/AuthModalContext';
-import { authService } from '../../modules/auth/services/authService';
-import { MobileDrawer } from './MobileDrawer';
+} from "lucide-react";
+import { Button } from "../ui/Button";
+import { ThemeToggle } from "../ui/ThemeToggle";
+import { useAuthModal } from "../../modules/auth/context/AuthModalContext";
+import { authService } from "../../modules/auth/services/authService";
+import { MobileDrawer } from "./MobileDrawer";
+import { ROUTES } from "../../config/routes.config";
 
 const GENRE_DROPDOWN_ITEMS = [
-  { name: 'Cyberpunk', desc: 'Thế giới tương lai & Kỹ xảo' },
-  { name: 'Hành Động', desc: 'Những pha rượt đuổi nghẹt thở' },
-  { name: 'Anime', desc: 'Đồ họa đỉnh cao Nhật Bản' },
-  { name: 'Viễn Tưởng', desc: 'Khám phá vũ trụ & Khoa học' },
-  { name: 'Kinh Dị', desc: 'Hồi hộp, rùng rợn & Kịch tính' },
-  { name: 'Tình Cảm', desc: 'Lãng mạn & Xúc động' },
+  { name: "Cyberpunk", desc: "Thế giới tương lai & Kỹ xảo" },
+  { name: "Hành Động", desc: "Những pha rượt đuổi nghẹt thở" },
+  { name: "Anime", desc: "Đồ họa đỉnh cao Nhật Bản" },
+  { name: "Viễn Tưởng", desc: "Khám phá vũ trụ & Khoa học" },
+  { name: "Kinh Dị", desc: "Hồi hộp, rùng rợn & Kịch tính" },
+  { name: "Tình Cảm", desc: "Lãng mạn & Xúc động" },
 ];
 
 export const Header: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isGenresOpen, setIsGenresOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    return Boolean(localStorage.getItem('accessToken'));
+    return Boolean(localStorage.getItem("accessToken"));
   });
   const [favoritesCount, setFavoritesCount] = useState<number>(0);
 
@@ -51,9 +52,9 @@ export const Header: React.FC = () => {
   // 1. Kiểm tra trạng thái Authentication & Favorites Count từ localStorage
   useEffect(() => {
     const checkState = () => {
-      setIsAuthenticated(Boolean(localStorage.getItem('accessToken')));
+      setIsAuthenticated(Boolean(localStorage.getItem("accessToken")));
       try {
-        const saved = localStorage.getItem('cyber_favorites');
+        const saved = localStorage.getItem("cyber_favorites");
         if (saved) {
           const ids = JSON.parse(saved);
           setFavoritesCount(Array.isArray(ids) ? ids.length : 0);
@@ -65,8 +66,8 @@ export const Header: React.FC = () => {
       }
     };
     checkState();
-    window.addEventListener('storage', checkState);
-    return () => window.removeEventListener('storage', checkState);
+    window.addEventListener("storage", checkState);
+    return () => window.removeEventListener("storage", checkState);
   }, [location.pathname]);
 
   // 2. Đóng dropdowns khi click ra ngoài
@@ -85,20 +86,20 @@ export const Header: React.FC = () => {
         setIsUserMenuOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   // 3. Phím tắt toàn cục Ctrl+K hoặc Cmd+K để focus vào ô tìm kiếm
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         searchInputRef.current?.focus();
       }
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   // 4. Xử lý submit tìm kiếm
@@ -113,7 +114,7 @@ export const Header: React.FC = () => {
     authService.logout();
     setIsAuthenticated(false);
     setIsUserMenuOpen(false);
-    navigate('/');
+    navigate("/");
   };
 
   return (
@@ -127,32 +128,33 @@ export const Header: React.FC = () => {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 sm:h-20 flex items-center justify-between gap-3 sm:gap-4">
           {/* Cụm 1: Brand Logo */}
-          <Link to="/" className="flex items-center gap-2.5 group shrink-0">
-            <div className="w-10 h-10 rounded-xl bg-linear-to-br from-[#00F0FF] via-[#00A6FF] to-[#9D00FF] p-0.5 shadow-[0_0_15px_rgba(0,240,255,0.4)] group-hover:shadow-[0_0_25px_rgba(0,240,255,0.7)] group-hover:scale-105 transition-all">
-              <div className="w-full h-full bg-[#070913] rounded-[10px] flex items-center justify-center text-[#00F0FF]">
-                <Film size={22} className="group-hover:rotate-6 transition-transform" />
-              </div>
+          <Link
+            to={ROUTES.ROOT}
+            className="flex items-center gap-2.5 group shrink-0"
+          >
+            <div className="w-10 h-10">
+              <img
+                src="/logo.png"
+                alt="Logo"
+                className="object-contain group-hover:scale-105 transition-all"
+              />
             </div>
-            <div className="flex flex-col">
-              <span className="text-xl font-black tracking-wider text-slate-900 dark:text-transparent dark:bg-clip-text dark:bg-linear-to-r dark:from-white dark:via-slate-100 dark:to-[#00F0FF]">
-                CYBER<span className="text-[#00A6FF] dark:text-[#00F0FF]">FLIX</span>
-              </span>
-              <span className="text-[9px] tracking-widest text-[#00A6FF] dark:text-[#00F0FF] uppercase font-bold -mt-1 opacity-90">
-                Stream GenZ
-              </span>
-            </div>
+            <span className="text-2xl sm:text-xl font-black text-slate-900 dark:text-white tracking-wider">
+              FUSE
+              <span className="text-[#00A6FF] dark:text-[#00F0FF]">FLIX</span>
+            </span>
           </Link>
 
           {/* Cụm 2: Desktop Navigation Links (Kèm Floating Active Neon Pill) */}
           <nav className="hidden lg:flex items-center gap-1.5 xl:gap-2">
             <NavLink
-              to="/"
+              to={ROUTES.ROOT}
               end
               className={({ isActive }) =>
                 `relative px-3.5 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
                   isActive
-                    ? 'text-[#00A6FF] dark:text-[#00F0FF] bg-blue-50/80 dark:bg-[#00F0FF]/10 border border-blue-200 dark:border-[#00F0FF]/35 shadow-xs dark:shadow-[0_0_12px_rgba(0,240,255,0.25)]'
-                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-white/5'
+                    ? "text-[#00A6FF] dark:text-[#00F0FF] bg-blue-50/80 dark:bg-[#00F0FF]/10 border border-blue-200 dark:border-[#00F0FF]/35 shadow-xs dark:shadow-[0_0_12px_rgba(0,240,255,0.25)]"
+                    : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-white/5"
                 }`
               }
             >
@@ -171,8 +173,8 @@ export const Header: React.FC = () => {
               className={({ isActive }) =>
                 `relative px-3.5 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
                   isActive
-                    ? 'text-[#00A6FF] dark:text-[#00F0FF] bg-blue-50/80 dark:bg-[#00F0FF]/10 border border-blue-200 dark:border-[#00F0FF]/35 shadow-xs dark:shadow-[0_0_12px_rgba(0,240,255,0.25)]'
-                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-white/5'
+                    ? "text-[#00A6FF] dark:text-[#00F0FF] bg-blue-50/80 dark:bg-[#00F0FF]/10 border border-blue-200 dark:border-[#00F0FF]/35 shadow-xs dark:shadow-[0_0_12px_rgba(0,240,255,0.25)]"
+                    : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-white/5"
                 }`
               }
             >
@@ -191,8 +193,8 @@ export const Header: React.FC = () => {
               className={({ isActive }) =>
                 `relative px-3.5 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
                   isActive
-                    ? 'text-[#00A6FF] dark:text-[#00F0FF] bg-blue-50/80 dark:bg-[#00F0FF]/10 border border-blue-200 dark:border-[#00F0FF]/35 shadow-xs dark:shadow-[0_0_12px_rgba(0,240,255,0.25)]'
-                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-white/5'
+                    ? "text-[#00A6FF] dark:text-[#00F0FF] bg-blue-50/80 dark:bg-[#00F0FF]/10 border border-blue-200 dark:border-[#00F0FF]/35 shadow-xs dark:shadow-[0_0_12px_rgba(0,240,255,0.25)]"
+                    : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-white/5"
                 }`
               }
             >
@@ -213,15 +215,15 @@ export const Header: React.FC = () => {
                 onClick={() => setIsGenresOpen(!isGenresOpen)}
                 className={`flex items-center gap-1 px-3.5 py-2 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer ${
                   isGenresOpen
-                    ? 'text-[#00F0FF] bg-blue-50/50 dark:bg-[#00F0FF]/10'
-                    : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-white/5'
+                    ? "text-[#00F0FF] bg-blue-50/50 dark:bg-[#00F0FF]/10"
+                    : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-white/5"
                 }`}
               >
                 <span>Thể Loại</span>
                 <ChevronDown
                   size={14}
                   className={`transition-transform duration-200 ${
-                    isGenresOpen ? 'rotate-180 text-[#00F0FF]' : 'opacity-70'
+                    isGenresOpen ? "rotate-180 text-[#00F0FF]" : "opacity-70"
                   }`}
                 />
               </button>
@@ -257,8 +259,8 @@ export const Header: React.FC = () => {
               className={({ isActive }) =>
                 `relative px-3.5 py-2 rounded-xl text-sm font-bold transition-all duration-200 flex items-center gap-1.5 ${
                   isActive
-                    ? 'text-amber-600 dark:text-[#FFEE00] bg-amber-50/80 dark:bg-[#FFEE00]/15 border border-amber-300 dark:border-[#FFEE00]/40 shadow-xs dark:shadow-[0_0_12px_rgba(255,238,0,0.25)]'
-                    : 'text-amber-600 dark:text-[#FFEE00] hover:bg-amber-50 dark:hover:bg-[#FFEE00]/10'
+                    ? "text-amber-600 dark:text-[#FFEE00] bg-amber-50/80 dark:bg-[#FFEE00]/15 border border-amber-300 dark:border-[#FFEE00]/40 shadow-xs dark:shadow-[0_0_12px_rgba(255,238,0,0.25)]"
+                    : "text-amber-600 dark:text-[#FFEE00] hover:bg-amber-50 dark:hover:bg-[#FFEE00]/10"
                 }`
               }
             >
@@ -289,7 +291,7 @@ export const Header: React.FC = () => {
               {searchQuery && (
                 <button
                   type="button"
-                  onClick={() => setSearchQuery('')}
+                  onClick={() => setSearchQuery("")}
                   aria-label="Xóa từ khóa"
                   className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
                 >
@@ -330,7 +332,7 @@ export const Header: React.FC = () => {
                   <div className="absolute right-0 mt-2 w-56 rounded-2xl bg-white/95 dark:bg-[#0d1224]/95 backdrop-blur-2xl border border-slate-200 dark:border-[#162038] shadow-2xl p-2 z-50 animate-in fade-in zoom-in-95 duration-150">
                     <div className="px-3 py-2 border-b border-slate-200/60 dark:border-white/10 mb-1">
                       <div className="text-xs font-bold text-slate-900 dark:text-white truncate">
-                        Thành viên Cyberflix
+                        Thành viên Fuseflix
                       </div>
                       <div className="text-[11px] text-[#00A6FF] dark:text-[#00F0FF] font-semibold flex items-center gap-1 mt-0.5">
                         <Sparkles size={11} /> Đã đăng nhập
@@ -342,7 +344,8 @@ export const Header: React.FC = () => {
                       onClick={() => setIsUserMenuOpen(false)}
                       className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-[#00F0FF] transition-colors"
                     >
-                      <User size={14} className="text-[#00F0FF]" /> Hồ Sơ & Cài Đặt
+                      <User size={14} className="text-[#00F0FF]" /> Hồ Sơ & Cài
+                      Đặt
                     </Link>
 
                     <Link
@@ -350,7 +353,8 @@ export const Header: React.FC = () => {
                       onClick={() => setIsUserMenuOpen(false)}
                       className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-rose-500 transition-colors"
                     >
-                      <Heart size={14} className="text-rose-500" /> Phim Yêu Thích
+                      <Heart size={14} className="text-rose-500" /> Phim Yêu
+                      Thích
                     </Link>
 
                     <Link
@@ -358,7 +362,8 @@ export const Header: React.FC = () => {
                       onClick={() => setIsUserMenuOpen(false)}
                       className="flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-cyan-400 transition-colors"
                     >
-                      <History size={14} className="text-cyan-400" /> Lịch Sử Xem
+                      <History size={14} className="text-cyan-400" /> Lịch Sử
+                      Xem
                     </Link>
 
                     <Link
@@ -396,7 +401,7 @@ export const Header: React.FC = () => {
             {/* Mobile Menu Toggle Button (Touch target >= 40x40px) */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              aria-label={isMobileMenuOpen ? 'Đóng menu' : 'Mở menu điều hướng'}
+              aria-label={isMobileMenuOpen ? "Đóng menu" : "Mở menu điều hướng"}
               className="lg:hidden w-10 h-10 rounded-xl flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 active:scale-95 transition-all cursor-pointer"
             >
               {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}

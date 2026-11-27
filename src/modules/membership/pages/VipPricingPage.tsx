@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Crown, Check, QrCode, X } from 'lucide-react';
 import { Button } from '../../../components/ui/Button';
 import { useAuthModal } from '../../auth/context/AuthModalContext';
+import { CyberMascotCompanion } from '../components/CyberMascotCompanion';
 
 export const VipPricingPage: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
@@ -118,7 +119,7 @@ export const VipPricingPage: React.FC = () => {
               </ul>
             </div>
 
-            <div className="pt-8">
+            <div className="pt-8 relative z-20">
               <Button
                 variant={plan.isPopular ? 'glow' : 'secondary'}
                 className="w-full"
@@ -130,6 +131,9 @@ export const VipPricingPage: React.FC = () => {
           </div>
         ))}
       </div>
+
+      {/* Trợ lý linh vật Cyber Mascot với Bong bóng thoại Holographic */}
+      <CyberMascotCompanion />
 
       {/* Modal Quét Mã VietQR PayOS */}
       {showQrModal && (
